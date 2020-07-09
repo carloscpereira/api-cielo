@@ -1,0 +1,26 @@
+{
+  "name": "cielo",
+  "version": "1.0.0",
+  "description": "api responsible for dealing with the business rules and payments of the Grupo Atemde",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saulolxx/api_cielo.git"
+  },
+  "keywords": [
+    "api",
+    "cielo",
+    "pagamento",
+    "grupo",
+    "atemde"
+  ],
+  "author": "Saulo Lins DIas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Saulolxx/api_cielo/issues"
+  },
+  "homepage": "https://github.com/Saulolxx/api_cielo#readme"
+}

@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint --config=./.eslintrc.js --ext .js ./",
     "dev": "nodemon src/server.js",
-    "start": "sucrase-node -r dotenv/config src/server.js",
+    "start": "node dist/server.js",
+    "build": "sucrase ./src -d ./dist --transforms imports",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

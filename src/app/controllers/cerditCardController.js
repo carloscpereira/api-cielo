@@ -241,7 +241,7 @@ class CerditCardController {
         data: response,
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.data);
       return res.status(400).json({
         error: 400,
         data: { message: 'Internal Server Error', description: error.message },

@@ -86,7 +86,7 @@ class CreditCard extends Cielo {
         },
       },
     };
-
+    console.log(body);
     const { data: response } = await this.api.post('/1/sales', body, {
       baseURL: this.baseURL,
     });

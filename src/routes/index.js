@@ -14,11 +14,13 @@ routes.post(
   operatorMiddleware,
   cieloController.store
 );
+
 routes.put(
   '/:operator/:establishment/credit-card/:paymentid',
   operatorMiddleware,
   cieloController.capture
 );
+
 routes.delete(
   '/:operator/:establishment/credit-card/:paymentid',
   operatorMiddleware,

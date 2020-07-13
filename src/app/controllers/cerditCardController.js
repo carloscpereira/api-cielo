@@ -32,7 +32,14 @@ class CerditCardController {
         Amount: Yup.number().required(),
         CardNumber: Yup.string().max(19).required(),
         Holder: Yup.string().max(25).required(),
-        ExpirationDate: Yup.string().required(),
+        ExpirationDate: Yup.string()
+          // eslint-disable-next-line no-useless-escape
+          .matches(/^(0?[1-9]|1[012])[\/\-]\d{4}$/gim, {
+            message:
+              'Invalid date format. Valid format for this field is MM/YYYY where the month must be between 1 and 12 and year with four digits',
+            excludeEmptyString: false,
+          })
+          .required(),
         SecurityCode: Yup.string().max(4).required(),
       });
 
@@ -95,6 +102,7 @@ class CerditCardController {
 
       return res.json({ error: null, data: { body: data, response: result } });
     } catch (error) {
+      console.log(error);
       return res.status(400).json({
         error: 400,
         data: { message: 'Internal Server Error', description: error.message },

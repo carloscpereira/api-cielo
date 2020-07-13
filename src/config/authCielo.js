@@ -2,7 +2,7 @@ export default {
   idental: {
     auth: [
       {
-        establishment: 'ATEMDE ODONTO CONSULTORIOS ODO',
+        establishment: 1109871985,
         headers: {
           MerchantId: '9948a8ca-0279-46c2-80f0-6710c1b233ad',
           MerchantKey: 'YwDUooTNRgVTIW7lTy5cIGBl6hGWG6hR4WOs1jML',
@@ -10,7 +10,7 @@ export default {
         cod: 90,
       },
       {
-        establishment: 'ASSISTENCIA ODONTOLOGICA PREV SA',
+        establishment: 2768247507,
         headers: {
           MerchantId: '6e5d94ad-38a2-42ee-acad-33c29f2e7141',
           MerchantKey: 'AtUIMd53dalv64PKbfpyPIK2fPb5d8IDJ0ZiGqgS',

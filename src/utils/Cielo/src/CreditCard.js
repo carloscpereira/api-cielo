@@ -1,10 +1,8 @@
 /* eslint-disable prefer-const */
-const moment = require('moment');
+// const moment = require('moment');
 
 const Cielo = require('./Cielo');
 const { searchFlag, toCorrectSize } = require('./helpers');
-
-const isDev = process.env.NODE_ENV === 'development';
 
 class CreditCard extends Cielo {
   constructor({ MerchantId, MerchantKey, RequestId }) {
@@ -16,7 +14,6 @@ class CreditCard extends Cielo {
       MerchantOrderId = null,
       Amount = null,
       Authenticate = false,
-      IsCryptocurrencyNegotiation = false,
       Capture = true,
       Custumer = null,
       Installments = 1,
@@ -43,14 +40,14 @@ class CreditCard extends Cielo {
 
       MerchantOrderId = date.getTime();
     }
-    console.log(new Date(ExpirationDate));
-    if (!moment(new Date(ExpirationDate)).isValid()) {
-      throw new Error(
-        `É necessário informar uma data válida para o prazo de vencimento`
-      );
-    }
+    // console.log(ExpirationDate);
+    // if (!moment(new Date(ExpirationDate)).isValid()) {
+    //   throw new Error(
+    //     `É necessário informar uma data válida para o prazo de vencimento`
+    //   );
+    // }
 
-    ExpirationDate = moment(new Date(ExpirationDate)).format('MM/YYYY');
+    // ExpirationDate = moment(new Date(ExpirationDate)).format('MM/YYYY');
 
     const flag = searchFlag(CardNumber);
 
@@ -75,12 +72,11 @@ class CreditCard extends Cielo {
         Installments,
         Type: 'CreditCard',
         Amount: Amount * 100,
-        ...(isDev ? { Provider: 'Simulado' } : {}),
+        ...(this.isDev ? { Provider: 'Simulado' } : {}),
         Capture,
         Currency: 'BRL',
         Authenticate,
         ...(SoftDescriptor ? { SoftDescriptor } : {}),
-        IsCryptocurrencyNegotiation,
         CreditCard: {
           CardNumber,
           Holder,

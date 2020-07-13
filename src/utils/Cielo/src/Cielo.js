@@ -1,23 +1,26 @@
 const axios = require('axios');
 
-const isDev = process.env.NODE_ENV !== 'production';
-
 class Cielo {
   constructor({ MerchantId = '', MerchantKey = '', RequestId = '' }) {
-    this.MerchantId = isDev
+    this.isDev = process.env.NODE_ENV !== 'production';
+
+    this.MerchantId = this.isDev
       ? '6aef4d18-cf82-4318-b59f-018d587d79dc'
       : MerchantId;
-    this.MerchantKey = isDev
+    this.MerchantKey = this.isDev
       ? 'OBKABVAHTDLQUFBQHGNPULQVLUJUXJWZJZLNYLJW'
       : MerchantKey;
     this.RequestId = RequestId;
+    console.log(this.isDev);
+    console.log(`Cielo is DEV: ${process.env.NODE_ENV !== 'production'}`);
+
     // baseUrl para requisições
-    this.baseURL = isDev
+    this.baseURL = this.isDev
       ? 'https://apisandbox.cieloecommerce.cielo.com.br'
       : 'https://api.cieloecommerce.cielo.com.br';
 
     // baseUrl para consultas
-    this.baseUrlQuery = isDev
+    this.baseUrlQuery = this.isDev
       ? 'https://apiquerysandbox.cieloecommerce.cielo.com.br'
       : 'https://apiquery.cieloecommerce.cielo.com.br/';
 

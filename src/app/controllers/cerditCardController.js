@@ -110,54 +110,9 @@ class CerditCardController {
     }
   }
 
-  async show(req, res) {
-    try {
-      const schema = Yup.object().shape({
-        establishment: Yup.string().required(),
-        paymentid: Yup.string().required(),
-      });
-
-      if (!(await schema.isValid(req.params))) {
-        try {
-          await schema.validate(req.params);
-        } catch (error) {
-          return res.status(401).json({
-            error: 401,
-            data: { message: 'Validation fails', errors: error.errors },
-          });
-        }
-      }
-
-      const { establishment, paymentid } = req.params;
-      const auth = req.cieloAuth.find(
-        (a) =>
-          parseInt(a.cod, 10) === parseInt(establishment, 10) ||
-          parseInt(a.establishment, 10) === parseInt(establishment, 10)
-      );
-
-      if (!auth) {
-        return res
-          .status(400)
-          .json({ error: 400, data: { message: 'Property code not found' } });
-      }
-
-      const apiCielo = new CreditCard(auth.headers);
-
-      const response = await apiCielo.getTransaction(paymentid);
-
-      return res.json({ error: null, data: response });
-    } catch (error) {
-      return res.status(400).json({
-        error: 400,
-        data: { message: 'Internal Server Error', description: error.message },
-      });
-    }
-  }
-
   async delete(req, res) {
     try {
       const schema = Yup.object().shape({
-        establishment: Yup.string().required(),
         paymentid: Yup.string().required(),
       });
 
@@ -172,78 +127,51 @@ class CerditCardController {
         }
       }
 
-      const { establishment, paymentid } = req.params;
-      const auth = req.cieloAuth.find(
-        (a) =>
-          parseInt(a.cod, 10) === parseInt(establishment, 10) ||
-          parseInt(a.establishment, 10) === parseInt(establishment, 10)
-      );
+      const { paymentid } = req.params;
 
-      if (!auth) {
-        return res
-          .status(400)
-          .json({ error: 400, data: { message: 'Property code not found' } });
-      }
+      const responses = [];
 
-      const apiCielo = new CreditCard(auth.headers);
-      const response = await apiCielo.cancellation({ id: paymentid });
-
-      return res.json({
-        error: null,
-        data: response,
-      });
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json({
-        error: 400,
-        data: { message: 'Internal Server Error', description: error.message },
-      });
-    }
-  }
-
-  async capture(req, res) {
-    try {
-      const schema = Yup.object().shape({
-        establishment: Yup.string().required(),
-        paymentid: Yup.string().required(),
-      });
-
-      if (!(await schema.isValid(req.params))) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const auth of req.cieloAuth) {
+        const apiCielo = new CreditCard(auth.headers);
         try {
-          await schema.validate(req.params);
-        } catch (error) {
-          return res.status(401).json({
-            error: 401,
-            data: { message: 'Validation fails', errors: error.errors },
-          });
+          // eslint-disable-next-line no-await-in-loop
+          const response = await apiCielo.cancellation({ id: paymentid });
+
+          responses.push(response);
+
+          if (
+            parseInt(response.Status, 10) === 10 ||
+            response.ReasonCode.toLowerCase() === 'successful'
+          )
+            break;
+        } catch (err) {
+          // console.log('status: ', err.response.status);
+          // if (parseInt(err.response.status, 10) === 404) {
+          //   console.log('entrei aqui');
+          //   throw err;
+          // }
+          responses.push({ Status: err.response.status });
         }
       }
 
-      const { establishment, paymentid } = req.params;
+      console.log(responses);
 
-      const auth = req.cieloAuth.find(
-        (a) =>
-          parseInt(a.cod, 10) === parseInt(establishment, 10) ||
-          parseInt(a.establishment, 10) === parseInt(establishment, 10)
-      );
-
-      if (!auth) {
-        return res
-          .status(400)
-          .json({ error: 400, data: { message: 'Property code not found' } });
-      }
-
-      const apiCielo = new CreditCard(auth.headers);
-      const response = await apiCielo.capture(paymentid);
+      const result =
+        responses.length === 1
+          ? responses.shift()
+          : responses.find((r) => parseInt(r.Status, 10) === 10);
 
       return res.json({
         error: null,
-        data: response,
+        data: result || {
+          message: 'Não foi possível efetuar o cancelamento da parcela',
+        },
       });
     } catch (error) {
       console.log(error.data);
       return res.status(400).json({
-        error: 400,
+        error: 404,
         data: { message: 'Internal Server Error', description: error.message },
       });
     }

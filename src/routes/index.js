@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import cieloController from '../app/controllers/cerditCardController';
+import establishmentController from '../app/controllers/establishmentController';
 import operatorMiddleware from '../app/middlewares/operator';
 
 const routes = new Router();
@@ -10,26 +11,39 @@ routes.get('/ping', async (req, res) => {
 });
 
 routes.post(
-  '/:operator/credit-card',
+  '/credit-card/:operator',
   operatorMiddleware,
   cieloController.store
 );
 
-routes.put(
-  '/:operator/:establishment/credit-card/:paymentid',
-  operatorMiddleware,
-  cieloController.capture
-);
-
 routes.delete(
-  '/:operator/:establishment/credit-card/:paymentid',
+  '/credit-card/:operator/:paymentid',
   operatorMiddleware,
   cieloController.delete
 );
 
-routes.get(
-  '/:operator/:establishment/credit-card/:paymentid',
+routes.post(
+  '/credit-card/:operator/:establishment',
   operatorMiddleware,
-  cieloController.show
+  establishmentController.store
 );
+
+routes.put(
+  '/credit-card/:operator/:establishment/:paymentid',
+  operatorMiddleware,
+  establishmentController.capture
+);
+
+routes.delete(
+  '/credit-card/:operator/:establishment/:paymentid',
+  operatorMiddleware,
+  establishmentController.delete
+);
+
+routes.get(
+  '/credit-card/:operator/:establishment/:paymentid',
+  operatorMiddleware,
+  establishmentController.show
+);
+
 export default routes;

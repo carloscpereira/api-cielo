@@ -31,7 +31,7 @@ class CerditCardController {
         SoftDescriptor: Yup.string().max(13),
         Amount: Yup.number().required(),
         CardNumber: Yup.string().max(19).required(),
-        Holder: Yup.string().max(25).required(),
+        Holder: Yup.string().max(255),
         ExpirationDate: Yup.string()
           // eslint-disable-next-line no-useless-escape
           .matches(/^(0?[1-9]|1[012])[\/\-]\d{4}$/gim, {

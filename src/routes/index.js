@@ -1,8 +1,9 @@
 import { Router } from 'express';
 
+import { checkOperator as operatorMiddleware } from '../app/middlewares';
+
 import cieloController from '../app/controllers/cerditCardController';
 import establishmentController from '../app/controllers/establishmentController';
-import operatorMiddleware from '../app/middlewares/operator';
 
 const routes = new Router();
 

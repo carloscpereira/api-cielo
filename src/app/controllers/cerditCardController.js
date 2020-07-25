@@ -94,6 +94,7 @@ class CerditCardController {
 
         result.push({
           establishment: auth.establishment,
+          cod: auth.cod,
           response,
         });
 

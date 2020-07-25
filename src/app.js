@@ -3,6 +3,7 @@ import 'dotenv/config';
 import express from 'express';
 import * as Sentry from '@sentry/node';
 import Youch from 'youch';
+import cors from 'cors';
 
 import 'express-async-errors';
 
@@ -10,6 +11,7 @@ import { checkAuthorization } from './app/middlewares';
 
 import routes from './routes';
 import sentryConfig from './config/sentry';
+import corsConfig from './config/cors';
 
 class App {
   constructor() {
@@ -23,6 +25,7 @@ class App {
   }
 
   middleware() {
+    this.server.use(cors(corsConfig));
     this.server.use(checkAuthorization);
     this.server.use(Sentry.Handlers.requestHandler());
     this.server.use(express.json());

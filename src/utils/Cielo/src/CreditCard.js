@@ -78,7 +78,7 @@ class CreditCard extends Cielo {
         Authenticate,
         ...(SoftDescriptor ? { SoftDescriptor } : {}),
         CreditCard: {
-          CardNumber,
+          ...(this.isDev ? { CardNumber: '4024007197692931' } : { CardNumber }),
           Holder,
           ExpirationDate,
           SecurityCode,

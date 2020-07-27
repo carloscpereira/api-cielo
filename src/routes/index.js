@@ -5,6 +5,11 @@ import { checkOperator as operatorMiddleware } from '../app/middlewares';
 import cieloController from '../app/controllers/cerditCardController';
 import establishmentController from '../app/controllers/establishmentController';
 
+/**
+ * Validations Middleware
+ */
+import validateCreditCardStore from '../app/validators/CreditCardStore';
+
 const routes = new Router();
 
 routes.get('/ping', async (req, res) => {
@@ -14,6 +19,7 @@ routes.get('/ping', async (req, res) => {
 routes.post(
   '/credit-card/:operator',
   operatorMiddleware,
+  validateCreditCardStore,
   cieloController.store
 );
 
@@ -26,6 +32,7 @@ routes.delete(
 routes.post(
   '/credit-card/:operator/:establishment',
   operatorMiddleware,
+  validateCreditCardStore,
   establishmentController.store
 );
 

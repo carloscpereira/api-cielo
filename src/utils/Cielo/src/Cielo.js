@@ -11,7 +11,6 @@ class Cielo {
       ? 'OBKABVAHTDLQUFBQHGNPULQVLUJUXJWZJZLNYLJW'
       : MerchantKey;
     this.RequestId = RequestId;
-    console.log(this.isDev);
     console.log(`Cielo is DEV: ${process.env.NODE_ENV !== 'production'}`);
 
     // baseUrl para requisições

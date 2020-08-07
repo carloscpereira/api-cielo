@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import moment from 'moment';
 
 export default async (req, res, next) => {
   try {
@@ -41,6 +42,19 @@ export default async (req, res, next) => {
     });
 
     await schema.validate(req.body, { abortEarly: false });
+
+    const { ExpirationDate } = req.body;
+
+    if (moment(ExpirationDate, 'MM/YYYY').isBefore(new Date())) {
+      const Error = new Yup.ValidationError();
+      Error.message = 'Validation fails';
+      Error.name = 'ValidationError';
+      Error.inner = ['Card expired'];
+      Error.error = ['Card expired'];
+      Error.path = __dirname;
+
+      throw Error;
+    }
 
     return next();
   } catch (error) {

@@ -2,7 +2,7 @@
 // const moment = require('moment');
 
 const Cielo = require('./Cielo');
-const { searchFlag, toCorrectSize } = require('./helpers');
+const { searchFlag, toCorrectSize, codReturn } = require('./helpers');
 
 class CreditCard extends Cielo {
   constructor({ MerchantId, MerchantKey, RequestId }) {
@@ -78,7 +78,7 @@ class CreditCard extends Cielo {
         Authenticate,
         ...(SoftDescriptor ? { SoftDescriptor } : {}),
         CreditCard: {
-          ...(this.isDev ? { CardNumber: '4024007197692931' } : { CardNumber }),
+          ...(this.isDev ? { CardNumber: '4024007197692932' } : { CardNumber }),
           Holder,
           ExpirationDate,
           SecurityCode,
@@ -90,7 +90,13 @@ class CreditCard extends Cielo {
       baseURL: this.baseURL,
     });
 
-    return response;
+    return {
+      ...response,
+      Payment: {
+        ...response.Payment,
+        ReturnCodeMessage: codReturn[response.Payment.ReturnCode],
+      },
+    };
   }
 
   async capture(paymentId = null, amount = null) {
